@@ -1,0 +1,9 @@
+db/*
+storage/*
+log/*
+/node_modules
+npm-debug.log
+.*rc
+.lev_history
+data/*
+docs/*

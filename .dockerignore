@@ -1,0 +1,6 @@
+.*rc
+node_modules
+storage/*
+db/*
+data/*
+docs/*
