@@ -5,6 +5,7 @@
   "main": "registry/server.js",
   "scripts": {
     "watch": "nodemon registry/server.js | bunyan",
+    "test": "npm run test:standard",
     "test:standard": "standard registry/*.js registry/node_modules/**/*.js"
   },
   "author": "Erik Kristensen <erik@erikkristensen.com>",
@@ -23,6 +24,7 @@
     "mkdirp": "^0.5.0",
     "node-uuid": "^1.4.3",
     "normalize-package-data": "^2.0.0",
+    "object-hash": "^1.1.2",
     "rc": "^1.0.1",
     "request": "^2.60.0",
     "restify": "^4.0.4",
