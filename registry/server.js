@@ -57,6 +57,7 @@ server.get('/', function rootHandler (req, res, next) {
   return next()
 })
 
+// Global Endpoints
 server.get('/:package', require('global-package/metadata'))
 server.get('/-/package/:package/dist-tags', require('global-package/dist-tags'))
 

@@ -47,6 +47,22 @@ If you are using the `none` authentication you can **omit** the second line.
 * Proxy connections to public registry and cache retrieved files
 * Implement `libkv` to support more metadata storage backends
 
+## Compatability
+
+This is compatible with `npm` client version 2.7.0 or greater. Not all commands are implemented and/or supported.
+
+### Supported Commands
+
+At a minimum these commands should be supported.
+
+* install
+* publish
+* unpublish
+* view
+* dist-tag add
+* dist-tag rm
+* dist-tag ls
+
 ## Namespaces
 
 There are two types of namespaces, non-namespaced (aka global) and namespaced. A namespace is the `@` character plus a string. On the public registry this is a registered username.
