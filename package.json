@@ -1,6 +1,6 @@
 {
   "name": "node-module-registry",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A Node.JS Module Registry compatible with the NPM and Yarn as well as namespaced packages",
   "scripts": {
     "start": "node registry/server.js",
