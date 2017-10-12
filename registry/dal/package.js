@@ -52,7 +52,7 @@ function publish (pkgdata, user, callback) {
       });
     },
     checkVersion: function publishCheckVersion (cb) {
-      if (config.allow_previous_version === true) {
+      if (config.settings.allow_previous_version === true) {
         return cb();
       }
 

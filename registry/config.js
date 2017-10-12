@@ -7,6 +7,9 @@ const config = require('rc')('registry', {
   logger: {
     level: 'info'
   },
+  settings: {
+    allow_previous_version: false
+  },
   auth: {
     type: 'none',
     github: {
@@ -30,8 +33,7 @@ const config = require('rc')('registry', {
       redirect: false,
       expires: 60
     }
-  },
-  allow_previous_version: true
+  }
 });
 
 module.exports = config;
