@@ -1,0 +1,30 @@
+version: '2'
+services:
+  s3-server:
+    image: scality/s3server
+    command: npm start
+    environment:
+      - SCALITY_ACCESS_KEY_ID=access_key
+      - SCALITY_SECRET_ACCESS_KEY=secret_key
+    ports:
+      - 3101:8000
+
+  registry:
+    build: .
+    command: npm start
+    environment:
+      npmregistry_storage__type: s3
+      npmregistry_storage__s3__accessKeyId: access_key
+      npmregistry_storage__s3__secretAccessKey: secret_key
+      npmregistry_storage__s3__region: us-east-1
+      npmregistry_storage__s3__bucket: npm-registry
+      npmregistry_storage__s3__prefix: testing
+      npmregistry_storage__s3__redirect: false
+      npmregistry_storage__s3__expires: 300
+      npmregistry_storage__s3__endpoint: http://localhost:3101
+      npmregistry_storage__s3__sslEnabled: false
+      npmregistry_storage__s3__s3ForcePathStyle: true
+    ports:
+      - 3100:3100
+    depends_on:
+      - s3-server

@@ -1,4 +1,4 @@
-# node module registry
+# node module registry (aka npm registry)
 
 This is an open source implementation of the server side registry for the npm client for publishing and installing node.js modules. This was reverse engineered by intercepting calls from the `npm` client. 
 
@@ -7,6 +7,14 @@ It was reverse engineered using ONLY the `npm` client and `npm --verbose` output
 This project was not designed to replace the public registry, but allow for people to run their own local or private registries for their own namespaces for free. There are some caveats. (see below)
 
 This project is over a year in the making, it has been used extensively, and now has been updated, documented and moved from native http server to use restify.
+
+## Changelog
+
+### 2.0.0
+
+This is a 100% revamp of registry, and moves to storing everything either locally or via s3 at the moment, no other storage mechanisms are available at this time. The manifest file for all packages are stored alongside the .tar.gz files of the npm packages.
+
+See the configuration below for how to configure.
 
 ## Usage
 
@@ -58,7 +66,7 @@ At a minimum these commands should be supported.
 * install
 * publish
 * unpublish
-* view
+* view (aka info)
 * dist-tag add
 * dist-tag rm
 * dist-tag ls
@@ -125,8 +133,16 @@ The configuration is handled by the `rc` module. Simply place the appropriately 
 
 ```javascript
 {
-  host: '0.0.0.0',
-  port: 3000,
+  server: {
+    host: '0.0.0.0',
+    port: 3000
+  },
+  logger: {
+    level: 'debug'
+  },
+  settings: {
+    allow_previous_version: false
+  },
   auth: {
     type: 'none',
     github: {
@@ -134,15 +150,6 @@ The configuration is handled by the `rc` module. Simply place the appropriately 
       cache: {
         path: './data/github-cache'
       }
-    }
-  },
-  logger: {
-    level: 'debug'
-  },
-  datastore: {
-    type: 'level',
-    level: {
-      path: './data/db'
     }
   },
   storage: {
@@ -159,8 +166,7 @@ The configuration is handled by the `rc` module. Simply place the appropriately 
       redirect: false,
       expires: 60
     }
-  },
-  allow_previous_version: false
+  }
 }
 ```
 
