@@ -4,7 +4,7 @@ const errors = require('restify-errors');
 const request = require('request');
 const GitHubAPI = require('github-cache');
 
-const pkg = require('../../../package.json');
+const pkg = require('../../package.json');
 const config = require('../config');
 const pkgdal = require('../dal/package');
 const logger = require('../logger').child({component: 'auth/github'});
