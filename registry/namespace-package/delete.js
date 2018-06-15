@@ -1,8 +1,9 @@
 // Local Modules
 var dalpkg = require('../dal/package');
-var logger = require('../logger').child({component: 'namespace-package/delete'});
 
 module.exports = function namespaceDelete (req, res, next) {
+  const logger = req.log.child({component: 'namespace-package/delete'});
+
   req.package.file = {
     namespace: req.params.file_namespace,
     name: req.params.file_name,

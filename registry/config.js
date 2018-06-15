@@ -5,17 +5,17 @@ const config = require('rc')('npmregistry', {
     secret: 'registry'
   },
   logger: {
-    level: 'info'
+    level: 'debug'
   },
   settings: {
     allow_previous_version: false
   },
   auth: {
-    type: 'none',
+    type: 'deny',
     github: {
       host: 'github.com',
       cache: {
-        path: './data/github-cache'
+        path: 'level:///./data/github-cache'
       }
     }
   },

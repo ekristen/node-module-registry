@@ -8,7 +8,8 @@ const auth = require('./auth');
 // Lets Restify
 const server = restify.createServer({
   name: pkg.name,
-  version: pkg.version
+  version: pkg.version,
+  log: logger
 });
 
 server.pre(function decodeURI (req, res, next) {
@@ -16,11 +17,17 @@ server.pre(function decodeURI (req, res, next) {
   return next();
 });
 
+server.use(restify.plugins.requestLogger({
+  properties: {
+    component: 'request'
+  }
+}));
 server.use(restify.plugins.authorizationParser());
 server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser({ mapParams: false }));
 
 server.use(function httpAuthParser (req, res, next) {
+  req.auth = {};
   require('http-auth-parser')(req);
   return next();
 });

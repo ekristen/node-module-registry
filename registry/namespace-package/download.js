@@ -1,15 +1,14 @@
 // Local Modules
 var dalpkg = require('../dal/package');
-var logger = require('../logger').child({component: 'namespace-package/download'});
 
 module.exports = function namespaceDownload (req, res, next) {
+  const logger = req.log.child({component: 'namespace-package/download'});
+
   req.package.file = {
     namespace: req.params.file_namespace,
     name: req.params.file_name,
     id: req.params.file_namespace + '/' + req.params.file_name
   };
-
-  logger.debug({package: req.package}, 'package info');
 
   dalpkg.getFile(req.package.file.id, (err, stream, redirect) => {
     if (err) {

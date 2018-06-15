@@ -43,6 +43,7 @@ module.exports = function namespaceMetadata (req, res, next) {
       logger.info({etag: etag}, 'etag matches');
 
       res.status(304);
+      res.end();
       return next();
     }
 

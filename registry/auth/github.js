@@ -2,16 +2,21 @@ const _ = require('lodash');
 const urlparser = require('github-url-parse');
 const errors = require('restify-errors');
 const request = require('request');
-const GitHubAPI = require('github-cache');
+const GitHubApi = require('github');
+const GitHubCache = require('github-cache');
 
-const pkg = require('../../../package.json');
+const pkg = require('../../package.json');
 const config = require('../config');
 const pkgdal = require('../dal/package');
 const logger = require('../logger').child({component: 'auth/github'});
 
 function GitHubStrategy () {
-  this.github = new GitHubAPI({
+  const githubApi = new GitHubApi({
     version: '3.0.0',
+    validateCache: true,
+  });
+
+  this.github = new GitHubCache(githubApi, {
     cachedb: config.auth.github.cache.path
   });
 
@@ -24,25 +29,34 @@ GitHubStrategy.prototype.userData = function () {
   return function GitHubUserData (req, res, next) {
     const logger = req.log.child({component: 'auth/github'});
 
+    if (typeof req.auth.token === 'undefined') {
+      return next(new errors.UnauthorizedError('No valid auth token present'));
+    }
+
     self.github.authenticate({
       type: 'oauth',
       token: req.auth.token
     });
 
-    self.github.user.get({}, function (err, user) {
+    self.github.users.get({}, function (err, user) {
       if (err) {
         logger.error({err: err}, 'github api error');
+        
+        if (err.code && err.code === 401) {
+          return next(new errors.UnauthorizedError('github unauthorized'));
+        }
+
         return next(err);
       }
 
-      if (typeof user.login === 'undefined') {
-        return next(new errors.UnauthorizedErrors('Invalid auth token or user login'));
+      if (typeof user.data.login === 'undefined') {
+        return next(new errors.UnauthorizedError('Invalid auth token or user login'));
       }
 
       req.auth.user = {
-        user: user.login,
-        name: user.name,
-        email: user.email
+        user: user.data.login,
+        name: user.data.name,
+        email: user.data.email
       };
 
       logger.info({user: req.auth.user}, 'user info');
@@ -82,6 +96,11 @@ GitHubStrategy.prototype.checkAuth = function (permission) {
         return next(err);
       }
 
+      // Catch invalid / missing packages when it isn't a new one!
+      if (_.isEmpty(packageData) && req.method !== 'POST') {
+        return next(new errors.NotFoundError('requsted package not found'));
+      }
+
       // Package is Unknown, uses the data in the req.body
       if (_.isEmpty(packageData)) {
         return self._urlFromData(req.body, function (err, repoUrl) {
@@ -94,6 +113,7 @@ GitHubStrategy.prototype.checkAuth = function (permission) {
         });
       }
 
+      // Package is known, lets get it from the database
       self._urlFromDatastore(req.package.id, function (err, repoUrl) {
         if (err) {
           logger.error({err: err}, '_urlFromDatastore error');
@@ -171,7 +191,7 @@ GitHubStrategy.prototype._verify = function (repoUrl, permission, callback) {
   repository.repo = repository.repo.replace('.git', '');
 
   self.github.repos.get({
-    user: repository.user,
+    owner: repository.user,
     repo: repository.repo
   }, function (err, repo) {
     if (err) {
@@ -181,9 +201,9 @@ GitHubStrategy.prototype._verify = function (repoUrl, permission, callback) {
 
     logger.debug({repo: repo}, 'repo');
 
-    if (typeof repo.message !== 'undefined' && repo.message === 'Moved Permanently') {
+    if (typeof repo.data.message !== 'undefined' && repo.data.message === 'Moved Permanently') {
       request.get({
-        url: repo.url,
+        url: repo.data.url,
         headers: {
           'User-Agent': [pkg.name, pkg.version].join('/')
         }
@@ -199,18 +219,18 @@ GitHubStrategy.prototype._verify = function (repoUrl, permission, callback) {
           return callback(e);
         }
 
-        if (repo.permissions[map[permission]] === false) {
+        if (repo.data.permissions[map[permission]] === false) {
           return callback(new Error('Insufficient Permissions'));
         }
 
         return callback(null);
       });
     } else {
-      if (typeof repo.permissions === 'undefined') {
+      if (typeof repo.data.permissions === 'undefined') {
         return callback(new Error('Unable to get repo permissions'));
       }
 
-      if (repo.permissions[map[permission]] === false) {
+      if (repo.data.permissions[map[permission]] === false) {
         return callback(new Error('Insufficient Permissions'));
       }
 
