@@ -201,3 +201,5 @@ These are possible error codes that will be returned by the node package registr
 * Using GitHub for authentication requires `repo` scope on personal access tokens
 * When using GitHub for authentication, the registry trusts the data being published in the package.json. Generally speaking each module should be tied to one GitHub repository, however this is **not** enforced. The repository field is used to determine permissions.
 
+
+.
