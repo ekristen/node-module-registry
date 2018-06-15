@@ -29,8 +29,12 @@ GitHubStrategy.prototype.userData = function () {
   return function GitHubUserData (req, res, next) {
     const logger = req.log.child({component: 'auth/github'});
 
+    if (req.auth === null) {
+      return next(new errors.UnauthorizedError('No valid auth token present, v1'));
+    }
+
     if (typeof req.auth.token === 'undefined') {
-      return next(new errors.UnauthorizedError('No valid auth token present'));
+      return next(new errors.UnauthorizedError('No valid auth token present, v2'));
     }
 
     self.github.authenticate({
