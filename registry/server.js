@@ -32,8 +32,6 @@ server.use(function httpAuthParser (req, res, next) {
   return next();
 });
 
-server.use(auth.userData());
-
 server.use(function packageParser (req, res, next) {
   if (typeof req.params.namespace !== 'undefined' && req.params.package !== 'undefined') {
     req.package = {
@@ -71,25 +69,25 @@ server.get('/:package', require('./global-package/metadata'));
 server.get('/-/package/:package/dist-tags', require('./global-package/dist-tags'));
 
 // Metadata Endpoints
-server.get('/:namespace/:package', auth.checkAuth('read'), require('./namespace-package/metadata'));
-server.get('/:namespace/:package/:tag', auth.checkAuth('read'), require('./namespace-package/metadata'));
+server.get('/:namespace/:package', auth.userData(), auth.checkAuth('read'), require('./namespace-package/metadata'));
+server.get('/:namespace/:package/:tag', auth.userData(), auth.checkAuth('read'), require('./namespace-package/metadata'));
 
 // Publish Endpoint
-server.put('/:namespace/:package', auth.checkAuth('write'), require('./namespace-package/publish'));
+server.put('/:namespace/:package', auth.userData(), auth.checkAuth('write'), require('./namespace-package/publish'));
 
 // Download Endpoint
-server.get('/:namespace/:package/-/:file_namespace/:file_name', auth.checkAuth('read'), require('./namespace-package/download'));
+server.get('/:namespace/:package/-/:file_namespace/:file_name', auth.userData(), auth.checkAuth('read'), require('./namespace-package/download'));
 
 // Revision Endpoint
-server.put('/:namespace/:package/-rev/:revision', auth.checkAuth('read'), require('./namespace-package/revision'));
+server.put('/:namespace/:package/-rev/:revision', auth.userData(), auth.checkAuth('read'), require('./namespace-package/revision'));
 
 // Delete Endpoint
-server.del('/:namespace/:package/-/:file_namespace/:file_name/-rev/:revision', auth.checkAuth('write'), require('./namespace-package/delete'));
+server.del('/:namespace/:package/-/:file_namespace/:file_name/-rev/:revision', auth.userData(), auth.checkAuth('write'), require('./namespace-package/delete'));
 
 // Dist-Tag Endpoints
-server.get('/-/package/:namespace/:package/dist-tags', auth.checkAuth('read'), require('./namespace-package/dist-tags/ls'));
-server.put('/-/package/:namespace/:package/dist-tags/:tag', auth.checkAuth('write'), require('./namespace-package/dist-tags/add'));
-server.del('/-/package/:namespace/:package/dist-tags/:tag', auth.checkAuth('write'), require('./namespace-package/dist-tags/rm'));
+server.get('/-/package/:namespace/:package/dist-tags', auth.userData(), auth.checkAuth('read'), require('./namespace-package/dist-tags/ls'));
+server.put('/-/package/:namespace/:package/dist-tags/:tag', auth.userData(), auth.checkAuth('write'), require('./namespace-package/dist-tags/add'));
+server.del('/-/package/:namespace/:package/dist-tags/:tag', auth.userData(), auth.checkAuth('write'), require('./namespace-package/dist-tags/rm'));
 
 module.exports = server;
 
