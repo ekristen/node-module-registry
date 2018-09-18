@@ -113,6 +113,8 @@ GitHubStrategy.prototype.checkAuth = function (permission) {
             return next(err);
           }
 
+          logger.info({repoUrl}, 'package is unknown, using data in req.body');
+
           self._verify(repoUrl, permission, next);
         });
       }
@@ -123,6 +125,8 @@ GitHubStrategy.prototype.checkAuth = function (permission) {
           logger.error({err: err}, '_urlFromDatastore error');
           return next(err);
         }
+
+        logger.info({id: req.package.id, repoUrl}, 'package is known, using data from datastore');
 
         self._verify(repoUrl, permission, next);
       });
@@ -153,7 +157,7 @@ GitHubStrategy.prototype._urlFromData = function (pkgdata, callback) {
 GitHubStrategy.prototype._urlFromDatastore = function (id, callback) {
   let repoUrl = null;
 
-  logger.info('_urlFromDatastore');
+  logger.info({id}, '_urlFromDataStore');
 
   pkgdal.get(id, function (err, packageData) {
     if (err) {
@@ -168,6 +172,8 @@ GitHubStrategy.prototype._urlFromDatastore = function (id, callback) {
     if (typeof packageData.repository !== 'undefined' && typeof packageData.repository.url !== 'undefined' && repoUrl === null) {
       repoUrl = packageData.repository.url;
     }
+
+    logger.info({repoUrl}, '_urlFromDatastore');
 
     callback(null, repoUrl);
   });

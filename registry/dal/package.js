@@ -15,8 +15,11 @@ function getPackage (pkgname, callback) {
     }
 
     if (err && err.notFound) {
+      logger.warn({pkgname}, 'not found, returning empty object');
       return callback(null, {});
     }
+
+    logger.info({pkgname}, 'found, returning stored package data');
 
     callback(null, stored);
   });
