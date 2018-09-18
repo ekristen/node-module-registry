@@ -175,6 +175,10 @@ GitHubStrategy.prototype._urlFromDatastore = function (id, callback) {
 
     logger.info({repoUrl}, '_urlFromDatastore');
 
+    if (repoUrl === null) {
+      return callback(new Error('unable to determine repository of package, is repository set in package.json'));
+    }
+
     callback(null, repoUrl);
   });
 };
