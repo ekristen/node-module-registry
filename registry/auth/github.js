@@ -101,7 +101,7 @@ GitHubStrategy.prototype.checkAuth = function (permission) {
       }
 
       // Catch invalid / missing packages when it isn't a new one!
-      if (_.isEmpty(packageData) && req.method !== 'POST') {
+      if (_.isEmpty(packageData) && (req.method !== 'POST' || req.method !== 'PUT')) {
         return next(new errors.NotFoundError('requsted package not found'));
       }
 
