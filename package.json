@@ -20,7 +20,7 @@
     "github": "13.1.1",
     "github-cache": "2.1.0",
     "github-url-parse": "0.1.0",
-    "http-auth-parser": "1.0.0",
+    "http-auth-parser": "1.1.0",
     "lodash": "3.10.1",
     "mkdirp": "0.5.1",
     "normalize-package-data": "2.4.0",
