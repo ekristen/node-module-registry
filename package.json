@@ -34,7 +34,7 @@
     "xtend": "4.0.1"
   },
   "devDependencies": {
-    "nock": "9.0.22",
+    "nock": "9.6.1",
     "nodemon": "1.12.1",
     "semistandard": "11.0.0",
     "tape": "4.8.0"
