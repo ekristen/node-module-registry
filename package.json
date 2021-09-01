@@ -16,7 +16,7 @@
     "aws-sdk": "2.133.0",
     "bluebird": "3.5.1",
     "bluebird-co": "2.2.0",
-    "bunyan": "1.8.12",
+    "bunyan": "1.8.15",
     "github": "13.1.1",
     "github-cache": "2.1.0",
     "github-url-parse": "0.1.0",
