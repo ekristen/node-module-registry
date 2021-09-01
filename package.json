@@ -18,7 +18,7 @@
     "bluebird-co": "2.2.0",
     "bunyan": "1.8.12",
     "github": "13.1.1",
-    "github-cache": "2.1.0",
+    "github-cache": "2.2.0",
     "github-url-parse": "0.1.0",
     "http-auth-parser": "1.0.0",
     "lodash": "3.10.1",
