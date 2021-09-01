@@ -31,7 +31,7 @@
     "restify-errors": "5.0.0",
     "split": "0.3.3",
     "uuid": "3.1.0",
-    "xtend": "4.0.1"
+    "xtend": "4.0.2"
   },
   "devDependencies": {
     "nock": "9.0.22",
