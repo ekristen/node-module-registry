@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "nock": "9.0.22",
-    "nodemon": "1.12.1",
+    "nodemon": "1.19.4",
     "semistandard": "11.0.0",
     "tape": "4.8.0"
   }
