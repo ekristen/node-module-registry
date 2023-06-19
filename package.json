@@ -14,7 +14,7 @@
     "after": "0.8.2",
     "async": "0.9.2",
     "aws-sdk": "2.133.0",
-    "bluebird": "3.5.1",
+    "bluebird": "3.7.2",
     "bluebird-co": "2.2.0",
     "bunyan": "1.8.12",
     "github": "13.1.1",
